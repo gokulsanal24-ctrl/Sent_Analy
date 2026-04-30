@@ -2,11 +2,16 @@ from flask import Flask, render_template, request, jsonify
 import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
+import os
+nltk_data_dir = os.path.join(os.getcwd(), 'nltk_data')
+os.makedirs(nltk_data_dir, exist_ok=True)
+nltk.data.path.append(nltk_data_dir)
+
 # Download VADER lexicon if not already present
 try:
     nltk.data.find('sentiment/vader_lexicon.zip')
 except LookupError:
-    nltk.download('vader_lexicon', quiet=True)
+    nltk.download('vader_lexicon', download_dir=nltk_data_dir, quiet=True)
 
 app = Flask(__name__, static_folder='templates/static')
 sia = SentimentIntensityAnalyzer()
